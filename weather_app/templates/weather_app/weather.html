@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Weather Forecast for {{ location }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            color: #ffffff;
+            background-image: url(https://www.shutterstock.com/shutterstock/videos/1104069995/thumb/1.jpg?ip=x480);
+            background-repeat: no-repeat;
+            background-size: 110%;
+            
+            
+        }
+        .container {
+            padding: 20px;
+            display: flex;
+            text-align: center;
+            color: rgb(255, 255, 255);
+        }
+        .containersl{
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+            color: rgb(255, 255, 255);
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            font-size: 16px;
+            width: 60%;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .weather{
+            width: 200px;
+            margin: 10px;
+            padding: 10px;
+            background-color: #2e2e2e4b;
+            color: #f0f8ff;
+            border-radius: 15px;
+            box-shadow: 0 0 10px rgba(48, 48, 48, 0.1);
+        }
+    
+
+        button:hover {
+            opacity: 0.8;
+        }
+
+        .current-weather, .forecast {
+            margin-top: 20px;
+        }
+
+        .forecast-slider {
+            display: flex;
+            overflow-x: scroll;
+        }
+
+        .forecast-item {
+            min-width: 200px;
+            margin: 10px;
+            padding: 10px;
+            background-color: #2e2e2e4b;
+            color: #f0f8ff;
+            border-radius: 15px;
+            box-shadow: 0 0 10px rgba(48, 48, 48, 0.1);
+        }
+        .image{
+            width: 50px;
+        }   
+
+    </style>
+<body>
+    <h1 style="text-align: center;">Weather Forecast for {{ location }}</h1>
+    <div class="container">
+        <div class="weather">
+        <img class="image" src="https://static.vecteezy.com/system/resources/thumbnails/011/029/266/small_2x/temperature-sign-for-design-element-png.png" alt="">
+        <p >Temperature: {{ current_weather.temperature }}°C</p>
+        </div>
+        <div class="weather">
+            <img class="image" src="https://cdn-icons-png.freepik.com/512/1779/1779817.png" alt="">
+            <p>Humidity: {{ current_weather.humidity }}%</p>
+        </div>
+        <div class="weather">
+            <img class="image" src="https://cdn-icons-png.flaticon.com/512/2676/2676004.png" alt="">
+            <p>Pressure: {{ current_weather.pressure }} hPa</p>
+        </div>
+        <div class="weather">
+            <img class="image" src="https://cdn-icons-png.flaticon.com/512/3104/3104631.png" alt="">
+            <p>Wind: {{ current_weather.wind }} m/s</p>
+        </div>
+        <div class="weather">
+            <img class="image" src="https://freepngimg.com/thumb/heart/91984-blue-heart-drop-cloud-rain-png-file-hd.png" alt="">
+            <p>Rain (last 3h): {{ current_weather.rain|default:0 }} mm</p>
+        </div>
+        <div class="weather">
+            <img class="image" src="https://www.freeiconspng.com/thumbs/weather-icon-png/weather-icon-png-2.png" alt="">
+            <p>Description: {{ current_weather.description }}</p>
+        </div>
+    </div>
+        
+    
+        <div class="containersl">
+            <h2>Hourly Forecast</h2>
+            <div class="forecast-slider">
+                {% for forecast in hourly_forecast %}
+                    <div class="forecast-item">
+                        <p>{{ forecast.dt_txt }}</p>
+                        <p>Temp: {{ forecast.main.temp }}°C</p>
+                        <p>Humidity: {{ forecast.main.humidity }}%</p>
+                        <p>Rain: {{ forecast.rain.3h|default:0 }} mm</p>
+                    </div>
+                {% endfor %}
+            </div>
+            <h2>Weekly Forecast</h2>
+            <div class="forecast-slider">
+                {% for forecast in weekly_forecast %}
+                    <div class="forecast-item">
+                        <p>{{ forecast.dt_txt }}</p>
+                        <p>Temp: {{ forecast.main.temp }}°C</p>
+                        <p>Humidity: {{ forecast.main.humidity }}%</p>
+                        <p>Rain: {{ forecast.rain.3h|default:0 }} mm</p>
+                    </div>
+                {% endfor %}
+            </div>
+    </div>
+    <div style="text-align: center; ">
+        <form method="POST" action="{% url 'download_report' location|urlencode %}">
+            {% csrf_token %}
+            <input type="hidden" name="latitude" value="{{ latitude }}">
+            <input type="hidden" name="longitude" value="{{ longitude }}">
+            <button style="border-radius: 5px; background-color: rgb(0, 17, 56);" type="submit">Download Report</button>
+        </form>
+    </div>
+</body>
+</html>

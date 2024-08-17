@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Weather Forecast</title>
+    <style>
+    body {
+        background-image: url("https://www.esa.int/var/esa/storage/images/esa_multimedia/images/2023/05/24-hours_over_europe/24861981-1-eng-GB/24-hours_over_Europe.gif");
+        background-repeat: no-repeat;
+        background-size: 100%;
+        font-family: Arial, sans-serif;
+        background-color: #f0f8ff;
+        color: #333;
+    }
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    text-align: center;
+    margin-top: 10%;
+}
+.footer {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    text-align: center;
+    margin-top: 12%;
+}
+
+form {
+    margin-bottom: 20px;
+}
+
+input[type="text"] {
+    padding: 10px;
+    font-size: 16px;
+    width: 60%;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #56585a;
+    color: white;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+}
+
+button[type="button"] {
+    background-color: #0761f1;
+}
+
+button:hover {
+    opacity: 0.8;
+}
+
+.current-weather, .forecast {
+    margin-top: 20px;
+}
+
+.slider {
+    display: flex;
+    overflow-x: scroll;
+}
+
+.slide {
+    min-width: 200px;
+    margin: 10px;
+    padding: 10px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.title{
+    font-size: 60px;
+    color: #f0f8ff;
+    text-shadow: 2px 2px #000000;
+}
+</style>
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+</head>
+<body>
+    <!-- Navbar -->
+     
+    <!-- Navbar End -->
+
+    <div class="container">
+        <h1 class="title">Weather Forecast</h1>
+        <form method="post" action="{% url 'get_weather' %}">
+            <form method="get" method="post"  action="{% url 'home' %} ">
+                {% csrf_token %}
+                <input type="text" id="city-search" name="location" placeholder="Enter location" style="border-radius: 10px; border: none;">
+                <button type="submit">Search</button>
+            </form>
+        </form>
+        <button type="button" onclick="window.location.href='{% url 'map_view' %}'">Map</button>
+    </div>
+
+
+    <!-- Footer -->
+    <div class="footer">
+        <footer class="py-3 my-4">
+          <p class="text-center text-muted" style="color: #f0f8ff;">© 2024 ForecastFinder, Inc</p>
+        </footer>
+      </div>
+    <!-- Footer End -->
+
+    <script type="text/javascript">
+        $(function() {
+            $("#city-search").autocomplete({
+                source: "{% url 'city_suggestions' %}",
+                minLength: 1
+            });
+        });
+    </script>
+</body> 
+</html>
